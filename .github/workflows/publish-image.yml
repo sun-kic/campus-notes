@@ -59,13 +59,15 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/campus-notes:seed
             ${{ secrets.DOCKERHUB_USERNAME }}/campus-notes:latest
 
-      # The Docker Hub page is the first thing anyone sees. An image this
-      # deliberately broken must carry its warning there, not only in the repo.
-      - name: Update Docker Hub description
-        uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/campus-notes
-          short-description: "DELIBERATELY INSECURE training app (Rwanda Polytechnic ITLDO801). Classroom use only."
-          readme-filepath: ./.github/DOCKERHUB.md
+
+# The Docker Hub description is NOT set from here.
+#
+# Docker Hub refuses metadata edits from the same access token that is allowed
+# to push images: the PATCH returns 403 Forbidden while the push succeeds.
+# Editing the description needs a higher-privilege credential, and putting one
+# in CI to rewrite a paragraph is a bad trade.
+#
+# The description text lives at .github/DOCKERHUB.md and is pasted by hand into
+# https://hub.docker.com/repository/docker/<namespace>/campus-notes/general
+# whenever it changes. It carries the warning that this image is deliberately
+# insecure, which matters more than automating it.
