@@ -28,6 +28,12 @@ Then open `http://localhost:3000`.
 The image carries every one of the defects described below. **It is published for classroom use
 only.** Do not run it on a host reachable from the internet.
 
+`SESSION_SECRET` is set in that command because it is the interface the application is *supposed*
+to have — and this image ignores it. The signing secret is hardcoded in `src/auth.js`, which is one
+of the defects. Setting the variable does no harm, it simply has no effect until the defect is
+fixed, at which point the application refuses to start without it. That gap between the interface a
+program advertises and the one it honours is worth noticing.
+
 ### From source
 
 ```bash
